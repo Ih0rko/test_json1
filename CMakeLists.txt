@@ -14,6 +14,8 @@ find_package(GTest REQUIRED)
 
 enable_testing()
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 add_library(config_lib SHARED
     src/Config.cpp
 )
