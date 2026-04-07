@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(Boost_DEBUG ON)
 find_package(Boost REQUIRED NO_MODULE COMPONENTS json)
 find_package(GTest REQUIRED)
 
@@ -56,5 +57,7 @@ target_link_libraries(config_tests PRIVATE
     GTest::gtest
     GTest::gtest_main
 )
+
+message(STATUS "Boost include dirs: ${Boost_INCLUDE_DIRS}")
 
 add_test(NAME ConfigTests COMMAND config_tests)
