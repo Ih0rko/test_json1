@@ -2,6 +2,51 @@
 #include <boost/json.hpp>
 #include <stdexcept>
 
+void Config::validateFieldExists(const boost::json::object& json_obj, const std::string& field_name) {
+    if (!json_obj.contains(field_name)) {
+        throw std::runtime_error("Missing required field: '" + field_name + "'");
+    }
+}
+
+std::string Config::validateStringField(const boost::json::object& json_obj, const std::string& field_name) {
+    validateFieldExists(json_obj, field_name);
+    
+    const auto& value = json_obj.at(field_name);
+    if (!value.is_string()) {
+        throw std::runtime_error("Field '" + field_name + "' must be a string");
+    }
+    
+    return value.as_string().c_str();
+}
+
+int64_t Config::validateIntField(const boost::json::object& json_obj, const std::string& field_name) {
+    validateFieldExists(json_obj, field_name);
+    
+    const auto& value = json_obj.at(field_name);
+    if (!value.is_int64()) {
+        throw std::runtime_error("Field '" + field_name + "' must be an integer");
+    }
+    
+    return value.as_int64();
+}
+
+bool Config::validateBoolField(const boost::json::object& json_obj, const std::string& field_name) {
+    validateFieldExists(json_obj, field_name);
+    
+    const auto& value = json_obj.at(field_name);
+    if (!value.is_bool()) {
+        throw std::runtime_error("Field '" + field_name + "' must be a boolean");
+    }
+    
+    return value.as_bool();
+}
+
+void Config::validatePortRange(int64_t port) {
+    if (port < 0 || port > 65535) {
+        throw std::runtime_error("Port must be between 0 and 65535");
+    }
+}
+
 Config::Config(const std::string& json_str) {
     // Parse JSON
     auto json_value = boost::json::parse(json_str);
@@ -14,33 +59,13 @@ Config::Config(const std::string& json_str) {
     auto json_obj = json_value.as_object();
 
     // Parse and validate host
-    if (!json_obj.contains("host")) {
-        throw std::runtime_error("Missing required field: 'host'");
-    }
-    if (!json_obj.at("host").is_string()) {
-        throw std::runtime_error("Field 'host' must be a string");
-    }
-    host_ = json_obj.at("host").as_string().c_str();
+    host_ = validateStringField(json_obj, "host");
 
     // Parse and validate port
-    if (!json_obj.contains("port")) {
-        throw std::runtime_error("Missing required field: 'port'");
-    }
-    if (!json_obj.at("port").is_int64()) {
-        throw std::runtime_error("Field 'port' must be an integer");
-    }
-    auto port_value = json_obj.at("port").as_int64();
-    if (port_value < 0 || port_value > 65535) {
-        throw std::runtime_error("Port must be between 0 and 65535");
-    }
+    auto port_value = validateIntField(json_obj, "port");
+    validatePortRange(port_value);
     port_ = static_cast<uint16_t>(port_value);
 
     // Parse and validate enable_logging
-    if (!json_obj.contains("enable_logging")) {
-        throw std::runtime_error("Missing required field: 'enable_logging'");
-    }
-    if (!json_obj.at("enable_logging").is_bool()) {
-        throw std::runtime_error("Field 'enable_logging' must be a boolean");
-    }
-    enable_logging_ = json_obj.at("enable_logging").as_bool();
+    enable_logging_ = validateBoolField(json_obj, "enable_logging");
 }
