@@ -43,48 +43,4 @@ private:
     std::string host_;
     uint16_t port_;
     bool enable_logging_;
-
-    // Validation helper methods
-    
-    /**
-     * Validates that a field exists in the JSON object
-     * @param json_obj The JSON object to check
-     * @param field_name The name of the field
-     * @throws std::runtime_error if field doesn't exist
-     */
-    static void validateFieldExists(const boost::json::object& json_obj, const std::string& field_name);
-
-    /**
-     * Validates and extracts a string field
-     * @param json_obj The JSON object to check
-     * @param field_name The name of the field
-     * @return The string value of the field
-     * @throws std::runtime_error if field doesn't exist or has wrong type
-     */
-    static std::string validateStringField(const boost::json::object& json_obj, const std::string& field_name);
-
-    /**
-     * Validates and extracts an integer field
-     * @param json_obj The JSON object to check
-     * @param field_name The name of the field
-     * @return The integer value of the field
-     * @throws std::runtime_error if field doesn't exist or has wrong type
-     */
-    static int64_t validateIntField(const boost::json::object& json_obj, const std::string& field_name);
-
-    /**
-     * Validates and extracts a boolean field
-     * @param json_obj The JSON object to check
-     * @param field_name The name of the field
-     * @return The boolean value of the field
-     * @throws std::runtime_error if field doesn't exist or has wrong type
-     */
-    static bool validateBoolField(const boost::json::object& json_obj, const std::string& field_name);
-
-    /**
-     * Validates that a port number is within valid range (0-65535)
-     * @param port The port number to validate
-     * @throws std::runtime_error if port is out of range
-     */
-    static void validatePortRange(int64_t port);
 };

@@ -10,12 +10,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Boost REQUIRED NO_MODULE COMPONENTS json)
-
 find_package(GTest REQUIRED)
 
 enable_testing()
 
-add_library(config_lib
+add_library(config_lib SHARED
     src/Config.cpp
 )
 
@@ -37,11 +36,6 @@ add_custom_command(TARGET json_parser POST_BUILD
 )
 
 target_link_libraries(json_parser PRIVATE config_lib)
-
-# Link filesystem library (C++17)
-if(NOT MSVC)
-    target_link_libraries(json_parser PRIVATE stdc++fs)
-endif()
 
 # Compiler flags for modern C++
 if(MSVC)
