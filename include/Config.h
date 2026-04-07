@@ -3,7 +3,6 @@
 #include <string>
 #include <cstdint>
 #include <istream>
-#include <boost/json.hpp>
 
 class Config {
 public:
