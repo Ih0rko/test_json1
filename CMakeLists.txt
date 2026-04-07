@@ -19,7 +19,7 @@ add_library(config_lib
     src/Config.cpp
 )
 
-target_link_libraries(config_lib PRIVATE Boost::boost Boost::json)
+target_link_libraries(config_lib PRIVATE Boost::boost)
 
 target_include_directories(config_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -52,7 +52,6 @@ add_executable(config_tests
 target_link_libraries(config_tests PRIVATE
     config_lib
     Boost::boost
-    Boost::json
     GTest::gtest
     GTest::gtest_main
 )
