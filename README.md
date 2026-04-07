@@ -30,6 +30,16 @@ make
 ./json_parser
 ```
 
+### Running the Program
+
+```bash
+# Run with default config file (config.json)
+./json_parser
+
+# Run with custom config file
+./json_parser /path/to/custom_config.json
+```
+
 ### Running Tests
 
 ```bash
@@ -73,8 +83,9 @@ vcpkg install boost:x64-windows googletest:x64-windows
 
 ```
 ├── CMakeLists.txt           # CMake configuration
+├── config.json              # Default configuration file
 ├── src/
-│   ├── main.cpp             # Main program
+│   ├── main.cpp             # Main program (reads config from file)
 │   └── Config.cpp           # Config class implementation
 ├── include/
 │   └── Config.h             # Config class header

@@ -37,6 +37,11 @@ add_executable(json_parser
 
 target_link_libraries(json_parser PRIVATE config_lib)
 
+# Link filesystem library (C++17)
+if(NOT MSVC)
+    target_link_libraries(json_parser PRIVATE stdc++fs)
+endif()
+
 # Compiler flags for modern C++
 if(MSVC)
     target_compile_options(json_parser PRIVATE /W4)
