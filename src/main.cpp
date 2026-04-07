@@ -9,40 +9,28 @@ namespace fs = std::filesystem;
 
 constexpr const char* DEFAULT_CONFIG_FILE = "config.json";
 
-std::string readJsonFromFile(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        throw std::runtime_error("Cannot open file: " + filename);
-    }
-
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
-}
-
 int main(int argc, char* argv[]) {
     try {
         // Determine which config file to use
         std::string config_file = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
         
-        std::cout << "=== Configuration Parser ===" << std::endl;
         std::cout << "Loading configuration from: " << config_file << std::endl;
+        std::ifstream json_stream{config_file};
 
-        std::string json_content = readJsonFromFile(config_file);
+        if (!json_stream.is_open()) {
+            throw std::runtime_error("Failed to open file " + config_file);
+        }
 
-        Config config(json_content);
+        Config config{json_stream};
 
-        std::cout << "\nParsed Configuration:" << std::endl;
-        std::cout << "  Host: " << config.getHost() << std::endl;
-        std::cout << "  Port: " << config.getPort() << std::endl;
-        std::cout << "  Logging: " << (config.isLoggingEnabled() ? "Enabled" : "Disabled") << std::endl;
-
-        std::cout << "\n✓ Configuration loaded successfully!" << std::endl;
-
+        std::cout << "Result:" << std::endl
+            << "  Host: " << config.getHost() << std::endl
+            << "  Port: " << config.getPort() << std::endl
+            << "  Logging: " << std::boolalpha << config.isLoggingEnabled() << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "✗ Error: " << e.what() << std::endl;
-        std::cerr << "\nUsage: " << argv[0] << " [config_file]" << std::endl;
-        std::cerr << "Default config file: " << DEFAULT_CONFIG_FILE << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl
+            << "Usage: " << argv[0] << " [config_file]" << std::endl
+            << "Default config file: " << DEFAULT_CONFIG_FILE << std::endl;
         return 1;
     }
 

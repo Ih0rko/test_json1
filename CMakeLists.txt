@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(Boost 1.75 REQUIRED COMPONENTS json)
+find_package(Boost REQUIRED NO_MODULE COMPONENTS json)
 
 find_package(GTest REQUIRED)
 
@@ -27,6 +27,13 @@ target_include_directories(config_lib PUBLIC
 
 add_executable(json_parser
     src/main.cpp
+)
+
+add_custom_command(TARGET json_parser POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/config.json"
+            "$<TARGET_FILE_DIR:json_parser>/config.json"
+    COMMENT "Copying config file to binary directory"
 )
 
 target_link_libraries(json_parser PRIVATE config_lib)

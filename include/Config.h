@@ -2,10 +2,18 @@
 
 #include <string>
 #include <cstdint>
+#include <istream>
 #include <boost/json.hpp>
 
 class Config {
 public:
+    /**
+     * Constructor that parses JSON from std::istream
+     * @param json_stream Stream object to rread JSON from
+     * @throws std::exception if file read failed, JSON is invalid or required fields are missing
+     */
+    explicit Config(std::istream& json_stream);
+
     /**
      * Constructor that parses JSON from a string
      * @param json_str JSON string containing configuration

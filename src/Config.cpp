@@ -1,6 +1,7 @@
 #include "Config.h"
 #include <boost/json.hpp>
 #include <stdexcept>
+#include <iterator>
 
 void Config::validateFieldExists(const boost::json::object& json_obj, const std::string& field_name) {
     if (!json_obj.contains(field_name)) {
@@ -45,6 +46,10 @@ void Config::validatePortRange(int64_t port) {
     if (port < 0 || port > 65535) {
         throw std::runtime_error("Port must be between 0 and 65535");
     }
+}
+
+Config::Config(std::istream& json_stream)
+    : Config({std::istreambuf_iterator<char>(json_stream), std::istreambuf_iterator<char>()}) {
 }
 
 Config::Config(const std::string& json_str) {

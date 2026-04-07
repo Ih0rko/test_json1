@@ -15,7 +15,7 @@ A modern C++17 CMake project demonstrating JSON parsing using Boost.JSON with co
 
 - CMake 3.20 or higher
 - C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2017+)
-- Boost 1.70 or higher
+- Boost
 - Google Test (libgtest-dev on Ubuntu/Debian)
 
 ## Building
@@ -23,11 +23,8 @@ A modern C++17 CMake project demonstrating JSON parsing using Boost.JSON with co
 ### Linux/macOS
 
 ```bash
-mkdir build
-cd build
-cmake ..
-make
-./json_parser
+cmake -B build
+cmake --build build
 ```
 
 ### Running the Program
@@ -52,11 +49,8 @@ make test
 ### Windows (with Visual Studio)
 
 ```bash
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
-.\Release\json_parser.exe
+cmake -B build
+cmake --build build
 ```
 
 ## Installing Dependencies
