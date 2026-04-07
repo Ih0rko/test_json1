@@ -58,7 +58,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
-        sudo apt-get install -y libboost-all-dev libgtest-dev
+        sudo apt-get install -y libboost-json-dev libgtest-dev
         sudo cmake -S /usr/src/googletest -B /usr/src/googletest/build
         sudo cmake --build /usr/src/googletest/build --target install
 

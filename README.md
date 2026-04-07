@@ -58,7 +58,7 @@ cmake --build build
 ### Ubuntu/Debian
 
 ```bash
-sudo apt-get install libboost-all-dev libgtest-dev
+sudo apt-get install libboost-json-dev libgtest-dev
 ```
 
 ### macOS (with Homebrew)
