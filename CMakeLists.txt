@@ -9,7 +9,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(Boost_DEBUG ON)
 find_package(Boost REQUIRED NO_MODULE COMPONENTS json)
 find_package(GTest REQUIRED)
 
@@ -28,6 +27,7 @@ target_include_directories(config_lib PUBLIC
 add_executable(json_parser
     src/main.cpp
 )
+target_include_directories(json_parser PRIVATE ${Boost_INCLUDE_DIRS})
 
 add_custom_command(TARGET json_parser POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
@@ -50,14 +50,12 @@ endif()
 add_executable(config_tests
     tests/config_tests.cpp
 )
+target_include_directories(json_parser PRIVATE ${Boost_INCLUDE_DIRS})
 
 target_link_libraries(config_tests PRIVATE
     config_lib
-    Boost::json
     GTest::gtest
     GTest::gtest_main
 )
-
-message(STATUS "Boost include dirs: ${Boost_INCLUDE_DIRS}")
 
 add_test(NAME ConfigTests COMMAND config_tests)
