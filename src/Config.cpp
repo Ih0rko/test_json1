@@ -1,15 +1,17 @@
 #include "Config.h"
 #include <boost/json.hpp>
-#include <stdexcept>
 #include <iterator>
+#include <stdexcept>
 
-void Config::validateFieldExists(const boost::json::object& json_obj, const std::string& field_name) {
+namespace
+{
+void validateFieldExists(const boost::json::object& json_obj, const std::string& field_name) {
     if (!json_obj.contains(field_name)) {
         throw std::runtime_error("Missing required field: '" + field_name + "'");
     }
 }
 
-std::string Config::validateStringField(const boost::json::object& json_obj, const std::string& field_name) {
+std::string validateStringField(const boost::json::object& json_obj, const std::string& field_name) {
     validateFieldExists(json_obj, field_name);
     
     const auto& value = json_obj.at(field_name);
@@ -20,7 +22,7 @@ std::string Config::validateStringField(const boost::json::object& json_obj, con
     return value.as_string().c_str();
 }
 
-int64_t Config::validateIntField(const boost::json::object& json_obj, const std::string& field_name) {
+int64_t validateIntField(const boost::json::object& json_obj, const std::string& field_name) {
     validateFieldExists(json_obj, field_name);
     
     const auto& value = json_obj.at(field_name);
@@ -31,7 +33,7 @@ int64_t Config::validateIntField(const boost::json::object& json_obj, const std:
     return value.as_int64();
 }
 
-bool Config::validateBoolField(const boost::json::object& json_obj, const std::string& field_name) {
+bool validateBoolField(const boost::json::object& json_obj, const std::string& field_name) {
     validateFieldExists(json_obj, field_name);
     
     const auto& value = json_obj.at(field_name);
@@ -42,11 +44,13 @@ bool Config::validateBoolField(const boost::json::object& json_obj, const std::s
     return value.as_bool();
 }
 
-void Config::validatePortRange(int64_t port) {
+void validatePortRange(int64_t port) {
     if (port < 0 || port > 65535) {
         throw std::runtime_error("Port must be between 0 and 65535");
     }
 }
+}
+
 
 Config::Config(std::istream& json_stream)
     : Config({std::istreambuf_iterator<char>(json_stream), std::istreambuf_iterator<char>()}) {

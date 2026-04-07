@@ -10,12 +10,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Boost REQUIRED NO_MODULE COMPONENTS json)
-
 find_package(GTest REQUIRED)
 
 enable_testing()
 
-add_library(config_lib
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+add_library(config_lib SHARED
     src/Config.cpp
 )
 
@@ -38,12 +39,6 @@ add_custom_command(TARGET json_parser POST_BUILD
 
 target_link_libraries(json_parser PRIVATE config_lib)
 
-# Link filesystem library (C++17)
-if(NOT MSVC)
-    target_link_libraries(json_parser PRIVATE stdc++fs)
-endif()
-
-# Compiler flags for modern C++
 if(MSVC)
     target_compile_options(json_parser PRIVATE /W4)
     target_compile_options(config_lib PRIVATE /W4)
@@ -58,7 +53,6 @@ add_executable(config_tests
 
 target_link_libraries(config_tests PRIVATE
     config_lib
-    Boost::json
     GTest::gtest
     GTest::gtest_main
 )
