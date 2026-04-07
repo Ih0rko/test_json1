@@ -69,8 +69,13 @@ jobs:
         $ErrorActionPreference = 'Stop'
         git clone https://github.com/microsoft/vcpkg.git $env:RUNNER_TEMP\vcpkg
         & "$env:RUNNER_TEMP\vcpkg\bootstrap-vcpkg.bat"
-        & "$env:RUNNER_TEMP\vcpkg\vcpkg.exe" install boost:x64-windows googletest:x64-windows
+        & "$env:RUNNER_TEMP\vcpkg\vcpkg.exe" install boost:x64-windows
         echo "VCPKG_TOOLCHAIN_FILE=$env:RUNNER_TEMP\vcpkg\scripts\buildsystems\vcpkg.cmake" >> $env:GITHUB_ENV
+        # Build and install googletest
+        git clone https://github.com/google/googletest.git $env:RUNNER_TEMP\googletest
+        cd $env:RUNNER_TEMP\googletest
+        cmake -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --config Release --target install
 
     - name: Configure CMake (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
