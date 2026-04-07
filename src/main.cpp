@@ -23,22 +23,15 @@ std::string readJsonFromFile(const std::string& filename) {
 int main(int argc, char* argv[]) {
     try {
         // Determine which config file to use
-        std::string config_file = DEFAULT_CONFIG_FILE;
+        std::string config_file = argc > 1 ? argv[1] : DEFAULT_CONFIG_FILE;
         
-        if (argc > 1) {
-            config_file = argv[1];
-        }
-
         std::cout << "=== Configuration Parser ===" << std::endl;
         std::cout << "Loading configuration from: " << config_file << std::endl;
 
-        // Read JSON from file
         std::string json_content = readJsonFromFile(config_file);
 
-        // Parse configuration using Config class
         Config config(json_content);
 
-        // Display parsed configuration
         std::cout << "\nParsed Configuration:" << std::endl;
         std::cout << "  Host: " << config.getHost() << std::endl;
         std::cout << "  Port: " << config.getPort() << std::endl;

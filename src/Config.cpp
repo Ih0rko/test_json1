@@ -44,28 +44,23 @@ bool Config::validateBoolField(const boost::json::object& json_obj, const std::s
 void Config::validatePortRange(int64_t port) {
     if (port < 0 || port > 65535) {
         throw std::runtime_error("Port must be between 0 and 65535");
-    }
+    }u prefer not to link a librar
 }
 
 Config::Config(const std::string& json_str) {
-    // Parse JSON
     auto json_value = boost::json::parse(json_str);
 
-    // Validate JSON is an object
     if (!json_value.is_object()) {
         throw std::runtime_error("Configuration must be a JSON object");
     }
 
     auto json_obj = json_value.as_object();
 
-    // Parse and validate host
     host_ = validateStringField(json_obj, "host");
 
-    // Parse and validate port
     auto port_value = validateIntField(json_obj, "port");
     validatePortRange(port_value);
     port_ = static_cast<uint16_t>(port_value);
 
-    // Parse and validate enable_logging
     enable_logging_ = validateBoolField(json_obj, "enable_logging");
 }

@@ -5,21 +5,17 @@ project(JSONParser
     LANGUAGES CXX
 )
 
-# Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Find Boost
+# Find Boost (Boost.JSON is header-only)
 find_package(Boost 1.70 REQUIRED)
 
-# Find GTest
 find_package(GTest REQUIRED)
 
-# Enable testing
 enable_testing()
 
-# Create library
 add_library(config_lib
     src/Config.cpp
 )
@@ -30,7 +26,6 @@ target_include_directories(config_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# Create executable
 add_executable(json_parser
     src/main.cpp
 )
@@ -51,16 +46,15 @@ else()
     target_compile_options(config_lib PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-# Create test executable
 add_executable(config_tests
     tests/config_tests.cpp
 )
 
 target_link_libraries(config_tests PRIVATE
     config_lib
+    Boost::boost
     GTest::gtest
     GTest::gtest_main
 )
 
-# Add tests
 add_test(NAME ConfigTests COMMAND config_tests)
