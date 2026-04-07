@@ -44,7 +44,7 @@ bool Config::validateBoolField(const boost::json::object& json_obj, const std::s
 void Config::validatePortRange(int64_t port) {
     if (port < 0 || port > 65535) {
         throw std::runtime_error("Port must be between 0 and 65535");
-    }u prefer not to link a librar
+    }
 }
 
 Config::Config(const std::string& json_str) {
