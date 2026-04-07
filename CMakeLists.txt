@@ -9,7 +9,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Find Boost (Boost.JSON is header-only)
 find_package(Boost 1.70 REQUIRED)
 
 find_package(GTest REQUIRED)
@@ -20,7 +19,7 @@ add_library(config_lib
     src/Config.cpp
 )
 
-target_link_libraries(config_lib PRIVATE Boost::boost)
+target_link_libraries(config_lib PRIVATE Boost::boost Boost::json)
 
 target_include_directories(config_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -53,6 +52,7 @@ add_executable(config_tests
 target_link_libraries(config_tests PRIVATE
     config_lib
     Boost::boost
+    Boost::json
     GTest::gtest
     GTest::gtest_main
 )
