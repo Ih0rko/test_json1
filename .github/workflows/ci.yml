@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y lcov clang-format libboost-json-dev libgtest-dev
+        cd /usr/src/gtest && sudo cmake . && sudo make && sudo cp *.a /usr/lib
+
+    - name: Configure
+      run: cmake -S . -B build -DENABLE_COVERAGE=ON
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Test
+      run: ctest --test-dir build --output-on-failure
+
+    - name: clang-format check
+      run: |
+        clang-format -style=file -n \
+          include/**/*.hpp src/**/*.cpp tests/**/*.cpp
+
+    - name: Coverage (Linux only)
+      if: runner.os == 'Linux'
+      run: |
+        cd build
+        lcov --capture --directory . --output-file coverage.info
+
+    - name: Archive binaries
+      uses: actions/upload-artifact@v4
+      with:
+        name: config-service-${{ runner.os }}
+        path: build/config_service*
+
+     - name: Install Doxygen (Ubuntu)
+      if: runner.os == 'Linux'
+      run: sudo apt-get install -y doxygen graphviz
+
+    - name: Generate Doxygen documentation
+      if: runner.os == 'Linux'
+      run: doxygen Doxyfile
+
+    - name: Upload documentation
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v4
+      with:
+        name: doxygen-docs
+        path: docs/html

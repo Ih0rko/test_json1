@@ -1,0 +1,6 @@
+function(append_coverage_compiler_flags)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        add_compile_options(--coverage -O0)
+        add_link_options(--coverage)
+    endif()
+endfunction()

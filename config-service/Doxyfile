@@ -1,0 +1,15 @@
+PROJECT_NAME           = "Config Service"
+PROJECT_BRIEF          = "Production-ready C++17 JSON configuration service"
+OUTPUT_DIRECTORY       = docs
+INPUT                  = include tests
+RECURSIVE              = YES
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = NO
+
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = NO
